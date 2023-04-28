@@ -23,9 +23,9 @@ def process_json():
     markup = f"[magnify: width 2; height 2]\n[column: left ORDER {order_number}; right Time {time}]\n"
 
     for item in items:
-        name = item.get('Name', '')
-        quantity = item.get('Quantity', '')
-        price = item.get('Price', '')
+        name = item.get('name', '')
+        quantity = item.get('quantity', '')
+        price = item.get('price', '')
 
         markup += f"[column: left > {name}; right * {quantity} \\[ {price} \\]]\n"
 
