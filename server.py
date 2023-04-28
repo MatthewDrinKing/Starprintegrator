@@ -1,5 +1,6 @@
 import requests
 from flask import Flask, request
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -9,25 +10,30 @@ def process_json():
     data = request.get_json()
 
     # Extract the relevant information from the JSON data
-    order_number = data['Order Number']
-    time = data['Time']
-    items = data['items']
+    order_number = data.get('Order Number', '')
+    time_str = data.get('Time', '')
+    table_number = data.get('Table Number', 'NA')
+    
+    # Format the time string
+    time = datetime.strptime(time_str, '%Y-%m-%dT%H:%M:%S.%fZ').strftime('%H:%M')
+
+    items = data.get('items', [])
 
     # Generate the markup based on the extracted information
     markup = f"[magnify: width 2; height 2]\n[column: left ORDER {order_number}; right Time {time}]\n"
 
     for item in items:
-        name = item['name']
-        quantity = item['quantity']
-        price = item['price']
+        name = item.get('Name', '')
+        quantity = item.get('Quantity', '')
+        price = item.get('Price', '')
 
         markup += f"[column: left > {name}; right * {quantity} \\[ {price} \\]]\n"
 
-    markup += "[column: left - Pint; right * 1 \\[ \\]; indent 60]\nTable Number: NA\n[cut: feed; partial]\n[magnify: width 2; height 2]"
+    markup += f"Table Number: {table_number}\n[cut: feed; partial]\n[magnify: width 2; height 2]"
 
     # Post the markup to the target server
     headers = {
-        'Content-Type': 'text/vnd.star.markup',
+        'Content-Type': 'application/json',
         'Star-Api-Key': 'd17b8317-d6ef-4c0e-9c9b-c5a8592bf8fb'
     }
     response = requests.post('https://api.starprinter.online/v1/a/drinking/d/a0bc35c9/q', data=markup, headers=headers)
