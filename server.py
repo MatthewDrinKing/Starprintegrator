@@ -31,13 +31,18 @@ def process_json():
 
     markup += f"Table Number: {table_number}\n[cut: feed; partial]\n[magnify: width 2; height 2]"
 
-    # Post the markup to the target servers
+    # Post the markup to the target server
     headers = {
         'Content-Type': 'application/json',
         'Star-Api-Key': 'd17b8317-d6ef-4c0e-9c9b-c5a8592bf8fb'
     }
-    star_response = requests.post('https://api.starprinter.online/v1/a/drinking/d/a0bc35c9/q', data=markup, headers=headers)
-    catcher_response = requests.post('https://testing-prod.requestcatcher.com/', json=data)
+    star_printer_response = requests.post('https://api.starprinter.online/v1/a/drinking/d/a0bc35c9/q', data=markup, headers=headers)
+
+    # Post the markup to the request catcher URL for debugging purposes
+    headers = {
+        'Content-Type': 'application/json',
+    }
+    request_catcher_response = requests.post('https://testing-prod.requestcatcher.com/', data=markup, headers=headers)
 
     # Return a response to the original request
     return 'OK'
