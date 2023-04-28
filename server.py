@@ -17,9 +17,9 @@ def process_json():
     markup = f"[magnify: width 2; height 2]\n[column: left ORDER {order_number}; right Time {time}]\n"
 
     for item in items:
-        name = item['Name']
-        quantity = item['Quantity']
-        price = item['Price']
+        name = item['name']
+        quantity = item['quantity']
+        price = item['price']
 
         markup += f"[column: left > {name}; right * {quantity} \\[ {price} \\]]\n"
 
