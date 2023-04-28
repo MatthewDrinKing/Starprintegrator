@@ -33,14 +33,14 @@ def process_json():
 
     # Post the markup to the target server
     headers = {
-        'Content-Type': 'application/json',
+        'Content-Type': 'text/vnd.star.markup',
         'Star-Api-Key': 'd17b8317-d6ef-4c0e-9c9b-c5a8592bf8fb'
     }
     star_printer_response = requests.post('https://api.starprinter.online/v1/a/drinking/d/a0bc35c9/q', data=markup, headers=headers)
 
     # Post the markup to the request catcher URL for debugging purposes
     headers = {
-        'Content-Type': 'application/json',
+        'Content-Type': 'text/vnd.star.markup',
     }
     request_catcher_response = requests.post('https://testing-prod.requestcatcher.com/', data=markup, headers=headers)
 
