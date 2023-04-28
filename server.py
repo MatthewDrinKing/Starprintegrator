@@ -1,6 +1,6 @@
 import requests
 from flask import Flask, request
-from datetime import datetime
+from datetime import datetime, timedelta
 
 app = Flask(__name__)
 
@@ -13,14 +13,16 @@ def process_json():
     order_number = data.get('Order Number', '')
     time_str = data.get('Time', '')
     table_number = data.get('Table Number', 'NA')
-    
+    offset = int(data.get('Timeoffset', '0'))
+
     # Format the time string
-    time = datetime.strptime(time_str, '%Y-%m-%dT%H:%M:%S.%fZ').strftime('%H:%M')
+    time = datetime.strptime(time_str, '%Y-%m-%dT%H:%M:%S.%fZ') + timedelta(hours=offset)
+    time_str = time.strftime('%H:%M')
 
     items = data.get('items', [])
 
     # Generate the markup based on the extracted information
-    markup = f"[magnify: width 2; height 2]\n[column: left ORDER {order_number}; right Time {time}]\n"
+    markup = f"[magnify: width 2; height 2]\n[column: left ORDER {order_number}; right Time {time_str}]\n"
 
     for item in items:
         name = item.get('name', '')
