@@ -13,8 +13,8 @@ def process_json():
     order_number = data.get('Order Number', '')
     time_str = data.get('Time', '')
     table_number = data.get('Table Number', 'NA')
-    path = data.get('Path', 'v1/a/drinking/d/a0bc35c9/q')  # New line to extract the path from the JSON data
-    api_key = data.get('APIKEY', '')  # New line to extract the API key from the JSON data
+    path = data.get('path', 'v1/a/drinking/d/a0bc35c9/q')  # New line to extract the path from the JSON data
+    api_key = data.get('APIKEY')  # New line to extract the API key from the JSON data
 
     # Format the time string
     time = datetime.strptime(time_str, '%Y-%m-%dT%H:%M:%S.%fZ').strftime('%H:%M')
@@ -36,9 +36,9 @@ def process_json():
     # Post the markup to the target server
     headers = {
         'Content-Type': 'text/vnd.star.markup',
-        'Star-Api-Key': api_key  # Use the API key from the JSON data
+        'Star-Api-Key': api_key,
     }
-    star_printer_response = requests.post(f'https://api.starprinter.online/{path}', data=markup, headers=headers)  # Use the path from the JSON data
+    star_printer_response = requests.post(f'https://api.starprinter.online/{path}', data=markup, headers=headers)
 
     # Post the markup to the request catcher URL for debugging purposes
     headers = {
