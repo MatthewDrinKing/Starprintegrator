@@ -43,6 +43,7 @@ def process_json():
     # Post the markup to the request catcher URL for debugging purposes
     headers = {
         'Content-Type': 'text/vnd.star.markup',
+        'Star-Api-Key': api_key,
     }
     request_catcher_response = requests.post('https://testing-prod.requestcatcher.com/', data=markup, headers=headers)
 
