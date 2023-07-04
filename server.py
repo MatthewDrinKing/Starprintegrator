@@ -15,14 +15,14 @@ def process_json():
 
     # Extract the relevant information from the JSON data
     time_str = data.get('Time', '')
-    table_number = data.get('Table Number', 'NA')
+    table_number = data.get('table_number', 'NA')
     path = data.get('path', 'v1/a/drinking/d/a0bc35c9/q')  # New line to extract the path from the JSON data
     api_key = data.get('api_key')  # New line to extract the API key from the JSON data
 
     # Format the time string
     time = datetime.strptime(time_str, '%Y-%m-%dT%H:%M:%S.%fZ').strftime('%H:%M')
 
-    items = data.get('items', [])
+    items = data.get('name', [])  # Updated key to 'name'
 
     # Increment the order number
     order_number += 1
