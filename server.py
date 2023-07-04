@@ -15,14 +15,14 @@ def process_json():
 
     # Extract the relevant information from the JSON data
     time_str = data.get('Time', '')
-    table_number = data.get('table_number', 'NA') if 'table_number' in data else 'NA'
+    table_number = data.get('Table Number', 'NA')
     path = data.get('path', 'v1/a/drinking/d/a0bc35c9/q')  # New line to extract the path from the JSON data
     api_key = data.get('api_key')  # New line to extract the API key from the JSON data
 
     # Format the time string
     time = datetime.strptime(time_str, '%Y-%m-%dT%H:%M:%S.%fZ').strftime('%H:%M')
 
-    items = data.get('name', [{}])[0]  # Updated to extract the first item from the 'name' list
+    items = data.get('items', [])
 
     # Increment the order number
     order_number += 1
@@ -30,11 +30,12 @@ def process_json():
     # Generate the markup based on the extracted information
     markup = f"[magnify: width 2; height 2]\n[column: left ORDER {order_number}; right Time {time}]\n"
 
-    name = items.get('name', '')
-    quantity = items.get('quantity', '')
-    price = items.get('price', '')
+    for item in items:
+        name = item.get('name', '')
+        quantity = item.get('quantity', '')
+        price = item.get('price', '')
 
-    markup += f"[column: left > {name}; right * {quantity} \\[ {price} \\]]\n"
+        markup += f"[column: left > {name}; right * {quantity} \\[ {price} \\]]\n"
 
     markup += f"Table Number: {table_number}\n[cut: feed; partial]\n[magnify: width 2; height 2]"
 
@@ -54,10 +55,3 @@ def process_json():
 
     # Return a response to the original request
     return 'OK'
-
-@app.route('/', methods=['GET'])  # Add a default route for the root path
-def default_route():
-    return 'Welcome to the Starprintegrator server'
-
-if __name__ == '__main__':
-    app.run(port=5000)  # Set the desired port number here
