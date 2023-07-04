@@ -22,7 +22,7 @@ def process_json():
     # Format the time string
     time = datetime.strptime(time_str, '%Y-%m-%dT%H:%M:%S.%fZ').strftime('%H:%M')
 
-    items = data.get('name', [])  # Updated key to 'name'
+    items = data.get('name', [{}])[0]  # Updated to extract the first item from the 'name' list
 
     # Increment the order number
     order_number += 1
@@ -30,12 +30,11 @@ def process_json():
     # Generate the markup based on the extracted information
     markup = f"[magnify: width 2; height 2]\n[column: left ORDER {order_number}; right Time {time}]\n"
 
-    for item in items:
-        name = item.get('name', '')
-        quantity = item.get('quantity', '')
-        price = item.get('price', '')
+    name = items.get('name', '')
+    quantity = items.get('quantity', '')
+    price = items.get('price', '')
 
-        markup += f"[column: left > {name}; right * {quantity} \\[ {price} \\]]\n"
+    markup += f"[column: left > {name}; right * {quantity} \\[ {price} \\]]\n"
 
     markup += f"Table Number: {table_number}\n[cut: feed; partial]\n[magnify: width 2; height 2]"
 
