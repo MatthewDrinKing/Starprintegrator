@@ -55,3 +55,10 @@ def process_json():
 
     # Return a response to the original request
     return 'OK'
+
+@app.route('/', methods=['GET'])  # Add a default route for the root path
+def default_route():
+    return 'Welcome to the Starprintegrator server'
+
+if __name__ == '__main__':
+    app.run(port=5000)  # Set the desired port number here
