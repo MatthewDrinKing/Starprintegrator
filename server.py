@@ -15,14 +15,15 @@ def process_json():
 
     # Extract the relevant information from the JSON data
     time_str = data.get('Time', '')
-    table_number = data.get('table_number', 'NA') if 'table_number' in data else 'NA'
+    table_number = data.get('table_number', 'NA')
     path = data.get('path', 'v1/a/drinking/d/a0bc35c9/q')  # New line to extract the path from the JSON data
+    foodpath = data.get('foodpath', 'v1/a/drinking/d/a0bc35c9/q')  # New line to extract the foodpath from the JSON data
     api_key = data.get('api_key')  # New line to extract the API key from the JSON data
 
     # Format the time string
     time = datetime.strptime(time_str, '%Y-%m-%dT%H:%M:%S.%fZ').strftime('%H:%M')
 
-    items = data.get('name', [{}])[0]  # Updated to extract the first item from the 'name' list
+    items = data.get('name', [{}])  # Updated to extract the list of items
 
     # Increment the order number
     order_number += 1
@@ -30,20 +31,27 @@ def process_json():
     # Generate the markup based on the extracted information
     markup = f"[magnify: width 2; height 2]\n[column: left ORDER {order_number}; right Time {time}]\n"
 
-    name = items.get('name', '')
-    quantity = items.get('quantity', '')
-    price = items.get('price', '')
+    for item in items:
+        name = item.get('name', '')
+        quantity = item.get('quantity', '')
+        price = item.get('price', '')
+        is_food = item.get('isfood', False)  # New line to extract the isfood value, default to False if not present
 
-    markup += f"[column: left > {name}; right * {quantity} \\[ {price} \\]]\n"
+        if is_food:
+            current_path = foodpath  # Use foodpath if is_food is True
+        else:
+            current_path = path  # Use normal path if is_food is False
+
+        markup += f"[column: left > {name}; right * {quantity} \\[ {price} \\]]\n"
+
+        # Post the markup to the target server
+        headers = {
+            'Content-Type': 'text/vnd.star.markup',
+            'Star-Api-Key': api_key,
+        }
+        star_printer_response = requests.post(f'https://api.starprinter.online/{current_path}', data=markup, headers=headers)
 
     markup += f"Table Number: {table_number}\n[cut: feed; partial]\n[magnify: width 2; height 2]"
-
-    # Post the markup to the target server
-    headers = {
-        'Content-Type': 'text/vnd.star.markup',
-        'Star-Api-Key': api_key,
-    }
-    star_printer_response = requests.post(f'https://api.starprinter.online/{path}', data=markup, headers=headers)
 
     # Post the markup to the request catcher URL for debugging purposes
     headers = {
@@ -60,4 +68,4 @@ def default_route():
     return 'Welcome to the Starprintegrator server'
 
 if __name__ == '__main__':
-    app.run(port=5001)  # Set the desired port number here
+    app.run(port=5000)  # Set the desired port number here
