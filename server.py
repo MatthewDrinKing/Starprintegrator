@@ -19,6 +19,7 @@ def process_json():
     table_number = data.get('table_number', 'NA')
     path = data.get('path', 'v1/a/drinking/d/a0bc35c9/q')  # New line to extract the path from the JSON data
     foodpath = data.get('foodpath', 'v1/a/drinking/d/a0bc35c9/q')  # New line to extract the foodpath from the JSON data
+    api_key = data.get('api_key')  # Extract the API key from the JSON data
 
     # Format the time string
     time = datetime.strptime(time_str, '%Y-%m-%dT%H:%M:%S.%fZ').strftime('%H:%M')
@@ -49,13 +50,16 @@ def process_json():
 
     # Post the markup to the target server
     headers = {
-    'Content-Type': 'text/vnd.star.markup',
-    'Star-Api-Key': 'd17b8317-d6ef-4c0e-9c9b-c5a8592bf8fb',
-}
+        'Content-Type': 'text/vnd.star.markup',
+        'Star-Api-Key': api_key,  # Include the API key in the headers
+    }
     star_printer_response = requests.post(f'https://api.starprinter.online/{current_path}', data=markup, headers=headers)
 
     # Post the markup to the request catcher URL for debugging purposes
-    request_catcher_response = requests.post('https://testing-prod.requestcatcher.com/', data=markup, headers=headers, verify=False)
+    headers = {
+        'Content-Type': 'text/vnd.star.markup',
+    }
+    request_catcher_response = requests.post('https://testing-prod.requestcatcher.com/', data=markup, headers=headers)
 
     # Return a response to the original request
     return 'OK'
@@ -64,5 +68,5 @@ def process_json():
 def default_route():
     return 'Welcome to the Starprintegrator server'
 
-if __name__ == '__main__':
+if __name=.=='__main__':
     app.run(host='0.0.0.0', port=5001)
