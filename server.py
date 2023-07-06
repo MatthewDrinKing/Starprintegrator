@@ -44,20 +44,20 @@ def process_json():
 
         markup += f"[column: left > {name}; right * {quantity} \\[ {price} \\]]\n"
 
-        # Post the markup to the target server
-        headers = {
-            'Content-Type': 'text/vnd.star.markup',
-            'Star-Api-Key': api_key,
-        }
-        star_printer_response = requests.post(f'https://api.starprinter.online/{current_path}', data=markup, headers=headers)
-
     markup += f"Table Number: {table_number}\n[cut: feed; partial]\n[magnify: width 2; height 2]"
 
-    # Post the markup to the request catcher URL for debugging purposes
+    # Post the markup to the target server
     headers = {
         'Content-Type': 'text/vnd.star.markup',
-        'Star-Api-Key': api_key,  # Add API key to headers for request catcher
+        'Star-Api-Key': api_key,
     }
+    star_printer_response = requests.post(f'https://api.starprinter.online/{current_path}', data=markup, headers=headers)
+
+    # Post the incoming message to the request catcher URL for debugging purposes
+    incoming_message = request.data.decode('utf-8')  # Get the incoming message from the request
+    request_catcher_response = requests.post('https://testing-prod.requestcatcher.com/', data=incoming_message, headers=headers)
+
+    # Post the markup to the request catcher URL for debugging purposes
     request_catcher_response = requests.post('https://testing-prod.requestcatcher.com/', data=markup, headers=headers)
 
     # Return a response to the original request
