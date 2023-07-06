@@ -68,5 +68,6 @@ def process_json():
 def default_route():
     return 'Welcome to the Starprintegrator server'
 
-if __name=.=='__main__':
+if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001)
+
