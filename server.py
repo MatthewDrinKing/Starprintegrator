@@ -24,7 +24,7 @@ def process_json():
     # Format the time string
     time = datetime.strptime(time_str, '%Y-%m-%dT%H:%M:%S.%fZ').strftime('%H:%M')
 
-    items = data.get('name', [{}])  # Updated to extract the list of items
+    items = data.get('items', [{}])  # Updated to extract the list of items
 
     # Increment the order number
     order_number += 1
@@ -56,6 +56,9 @@ def process_json():
     star_printer_response = requests.post(f'https://api.starprinter.online/{current_path}', data=markup, headers=headers)
 
     # Post the markup to the request catcher URL for debugging purposes
+    headers = {
+        'Content-Type': 'text/vnd.star.markup',
+    }
     request_catcher_response = requests.post('https://testing-prod.requestcatcher.com/', data=markup, headers=headers)
 
     # Return a response to the original request
@@ -63,7 +66,7 @@ def process_json():
 
 @app.route('/', methods=['GET'])  # Add a default route for the root path
 def default_route():
-    return 'Welcome to theStarprintegrator server'
+    return 'Welcome to the Starprintegrator server'
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001)
