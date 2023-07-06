@@ -43,7 +43,7 @@ def process_json():
         else:
             current_path = path  # Use normal path if is_food is False
 
-        markup += f"[column: left > {name}; right * {quantity} \\[ {price} \\]]\n"
+        markup += f"[column: left > {name}; right * {quantity} [ {price} ]]\n"
 
     markup += f"Table Number: {table_number}\n[cut: feed; partial]\n[magnify: width 2; height 2]"
     print('Generated markup:', markup)  # Print generated markup for debugging
@@ -56,9 +56,6 @@ def process_json():
     star_printer_response = requests.post(f'https://api.starprinter.online/{current_path}', data=markup, headers=headers)
 
     # Post the markup to the request catcher URL for debugging purposes
-    headers = {
-        'Content-Type': 'text/vnd.star.markup',
-    }
     request_catcher_response = requests.post('https://testing-prod.requestcatcher.com/', data=markup, headers=headers)
 
     # Return a response to the original request
@@ -66,8 +63,7 @@ def process_json():
 
 @app.route('/', methods=['GET'])  # Add a default route for the root path
 def default_route():
-    return 'Welcome to the Starprintegrator server'
+    return 'Welcome to theStarprintegrator server'
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001)
-
