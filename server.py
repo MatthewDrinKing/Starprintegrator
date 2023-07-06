@@ -12,6 +12,7 @@ def process_json():
 
     # Get the JSON data from the request
     data = request.get_json()
+    print('Received JSON data:', data)  # Print received JSON data for debugging
 
     # Extract the relevant information from the JSON data
     time_str = data.get('Time', '')
@@ -44,6 +45,7 @@ def process_json():
         markup += f"[column: left > {name}; right * {quantity} \\[ {price} \\]]\n"
 
     markup += f"Table Number: {table_number}\n[cut: feed; partial]\n[magnify: width 2; height 2]"
+    print('Generated markup:', markup)  # Print generated markup for debugging
 
     # Post the markup to the target server
     headers = {
