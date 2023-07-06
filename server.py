@@ -52,7 +52,7 @@ def process_json():
     star_printer_response = requests.post(f'https://api.starprinter.online/{current_path}', data=markup, headers=headers)
 
     # Post the markup to the request catcher URL for debugging purposes
-    request_catcher_response = requests.post('https://testing-prod.requestcatcher.com/', data=markup, headers=headers)
+    request_catcher_response = requests.post('https://testing-prod.requestcatcher.com/', data=markup, headers=headers, verify=False)
 
     # Return a response to the original request
     return 'OK'
