@@ -68,4 +68,4 @@ def default_route():
     return 'Welcome to the Starprintegrator server'
 
 if __name__ == '__main__':
-    app.run(port=5001)  # Set the desired port number here
+    app.run(host='0.0.0.0', port=5001)
