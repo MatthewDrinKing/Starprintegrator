@@ -44,14 +44,14 @@ def process_json():
 
         markup += f"[column: left > {name}; right * {quantity} \\[ {price} \\]]\n"
 
-        # Post the markup to the target server
-        headers = {
-            'Content-Type': 'text/vnd.star.markup',
-            'Star-Api-Key': api_key,
-        }
-        star_printer_response = requests.post(f'https://api.starprinter.online/{current_path}', data=markup, headers=headers)
-
     markup += f"Table Number: {table_number}\n[cut: feed; partial]\n[magnify: width 2; height 2]"
+
+    # Post the markup to the target server
+    headers = {
+        'Content-Type': 'text/vnd.star.markup',
+        'Star-Api-Key': api_key,
+    }
+    star_printer_response = requests.post(f'https://api.starprinter.online/{current_path}', data=markup, headers=headers)
 
     # Post the markup to the request catcher URL for debugging purposes
     headers = {
@@ -69,3 +69,4 @@ def default_route():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001)
+
