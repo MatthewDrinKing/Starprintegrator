@@ -43,7 +43,7 @@ def process_json():
         else:
             current_path = path  # Use normal path if is_food is False
 
-        markup += f"[column: left > {name}; right * {quantity} [ {price} ]]\n"
+        markup += f"[column: left > {name}; right * {quantity} \\[ {price} \\]]\n"
 
     markup += f"Table Number: {table_number}\n[cut: feed; partial]\n[magnify: width 2; height 2]"
     print('Generated markup:', markup)  # Print generated markup for debugging
