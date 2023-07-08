@@ -38,7 +38,7 @@ def process_json():
         price = item.get('price', '')
         is_food = item.get('isfood', False)  # New line to extract the isfood value, default to False if not present
 
-        if is_food:
+        if is_food == "true":
             current_path = foodpath  # Use foodpath if is_food is True
         else:
             current_path = path  # Use normal path if is_food is False
@@ -56,9 +56,6 @@ def process_json():
     star_printer_response = requests.post(f'https://api.starprinter.online/{current_path}', data=markup, headers=headers)
 
     # Post the markup to the request catcher URL for debugging purposes
-    headers = {
-        'Content-Type': 'text/vnd.star.markup',
-    }
     request_catcher_response = requests.post('https://testing-prod.requestcatcher.com/', data=markup, headers=headers)
 
     # Return a response to the original request
