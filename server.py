@@ -45,7 +45,7 @@ def process_json():
 
         markup += f"[column: left [size: small > {name}]; right [size: small * {quantity} {price}]]\n"
 
-    markup += f"[size: small]Table Number: {table_number}\n[cut: feed; partial]\n[magnify: width 2; height 2]"
+    markup += f"[size: small]Table Number: {table_number}\n[cut: feed; partial]\n[magnify: width 1; height 1]"
     print('Generated markup:', markup)  # Print generated markup for debugging
 
     # Post the markup to the target server
