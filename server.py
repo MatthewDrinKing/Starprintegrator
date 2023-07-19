@@ -32,35 +32,18 @@ def process_json():
     # Generate the markup based on the extracted information
     markup = (
         "[magnify: width 1; height 1]\n"
-        "[line]\n"
-        "[line]\n"
-        "[line]\n"
-        "[line]\n"
-        "[line]\n"
-        "[line]\n"
-        "[column: left [size: large ORDER {order_number}]; right [size: large Time {time}]]\n"
-        "[column: left {name}; right * {quantity}]\n"
-        "[line]\n"
-        "[line]\n"
-        "[line]\n"
-        "[line]\n"
-        "[line]\n"
-        "[line]\n"
+        "[size: large {order_info}]\n"
+        "{item_info}\n"
         "Table Number: {table_number}\n"
-        "[line]\n"
-        "[line]\n"
-        "[line]\n"
-        "[line]\n"
-        "[line]\n"
-        "[line]\n"
         "[cut]"
     )
 
+    order_info = f"[column: left ORDER {order_number}; right Time {time}]"
+    item_info = f"[column: left {items[0].get('name', '')}; right * {items[0].get('quantity', '')}]"
+
     markup = markup.format(
-        order_number=order_number,
-        time=time,
-        name=items[0].get('name', ''),
-        quantity=items[0].get('quantity', ''),
+        order_info=order_info,
+        item_info=item_info,
         table_number=table_number
     )
 
