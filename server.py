@@ -30,7 +30,7 @@ def process_json():
     order_number += 1
 
     # Generate the markup based on the extracted information
-    markup = f"[magnify: width 2; height 2]\n[column: left ORDER {order_number}; right Time {time}]\n"
+    markup = f"[magnify: width 2; height 2]\n[column: left [size: small ORDER {order_number}]; right [size: small Time {time}]]\n"
 
     for item in items:
         name = item.get('name', '')
@@ -43,9 +43,9 @@ def process_json():
         else:
             current_path = path  # Use normal path if is_food is False
 
-        markup += f"[column: left > {name}; right * {quantity} \\[ {price} \\]]\n"
+        markup += f"[column: left [size: small > {name}]; right [size: small * {quantity} {price}]]\n"
 
-    markup += f"Table Number: {table_number}\n[cut: feed; partial]\n[magnify: width 2; height 2]"
+    markup += f"[size: small]Table Number: {table_number}\n[cut: feed; partial]\n[magnify: width 2; height 2]"
     print('Generated markup:', markup)  # Print generated markup for debugging
 
     # Post the markup to the target server
