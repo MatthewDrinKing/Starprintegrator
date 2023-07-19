@@ -30,7 +30,7 @@ def process_json():
     order_number += 1
 
     # Generate the markup based on the extracted information
-    markup = f"[magnify: width 1; height 1]\n[column: left [size: large ORDER {order_number}]; right [size: large Time {time}]]\n"
+    markup = f"[magnify: width 1; height 1]\n[column: left ORDER {order_number}; right Time {time}]\n"
 
     for item in items:
         name = item.get('name', '')
