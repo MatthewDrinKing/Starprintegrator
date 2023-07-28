@@ -30,21 +30,25 @@ def process_json():
     order_number += 1
 
     # Generate the markup based on the extracted information
-    markup = f"[magnify: width 1; height 1]\n[column: left ORDER {order_number}; right Time {time}]\n"
+    markup = (
+        "[magnify: width 1; height 1]\n"
+        "[size: large ORDER {order_number}; right Time {time}]\n"
+        "[column: left {item_name}; right * {item_quantity}]\n"
+        "Table Number: {table_number}\n"
+        "[cut]"
+    )
 
-    for item in items:
-        name = item.get('name', '')
-        quantity = item.get('quantity', '')
-        is_food = item.get('isfood', False)  # New line to extract the isfood value, default to False if not present
+    item_name = items[0].get('name', '')
+    item_quantity = items[0].get('quantity', '')
 
-        if is_food:
-            current_path = foodpath  # Use foodpath if is_food is True
-        else:
-            current_path = path  # Use normal path if is_food is False
+    markup = markup.format(
+        order_number=order_number,
+        time=time,
+        item_name=item_name,
+        item_quantity=item_quantity,
+        table_number=table_number
+    )
 
-        markup += f"[column: left {name}; right * {quantity}]\n"
-
-    markup += f"Table Number: {table_number}\n[cut: feed; partial]\n[magnify: width 1; height 1]"
     print('Generated markup:', markup)  # Print generated markup for debugging
 
     # Post the markup to the target server
@@ -52,7 +56,7 @@ def process_json():
         'Content-Type': 'text/vnd.star.markup',
         'Star-Api-Key': api_key,  # Include the API key in the headers
     }
-    star_printer_response = requests.post(f'https://api.starprinter.online/{current_path}', data=markup, headers=headers)
+    star_printer_response = requests.post(f'https://api.starprinter.online/{path}', data=markup, headers=headers)
 
     # Post the markup to the request catcher URL for debugging purposes
     request_catcher_response = requests.post('https://testing-prod.requestcatcher.com/', data=markup, headers=headers)
