@@ -24,30 +24,36 @@ def process_json():
     # Format the time string
     time = datetime.strptime(time_str, '%Y-%m-%dT%H:%M:%S.%fZ').strftime('%H:%M')
 
-    items = data.get('items', [{}])  # Updated to extract the list of items
+    items = data.get('items', [])  # Updated to extract the list of items
 
     # Increment the order number
     order_number += 1
 
-    # Generate the markup based on the extracted information
+    # Initialize the markup with padding
     markup = (
         "[magnify: width 1; height 1]\n"
-        "[size: large ORDER {order_number}; right Time {time}]\n"
-        "[column: left {item_name}; right * {item_quantity}]\n"
-        "Table Number: {table_number}\n"
-        "[cut]"
+        "\n\n\n\n\n\n"  # 6 lines of padding before the order information
     )
 
-    item_name = items[0].get('name', '')
-    item_quantity = items[0].get('quantity', '')
+    # Generate the markup for each item in the order
+    for item in items:
+        item_name = item.get('name', '')
+        item_quantity = item.get('quantity', '')
 
-    markup = markup.format(
-        order_number=order_number,
-        time=time,
-        item_name=item_name,
-        item_quantity=item_quantity,
-        table_number=table_number
-    )
+        # Add the item markup to the overall markup
+        markup += (
+            f"[size: large ORDER {order_number}; right Time {time}]\n"
+            f"[column: left {item_name}; right * {item_quantity}]\n"
+        )
+
+    # Add the table number to the markup
+    markup += f"Table Number: {table_number}\n"
+
+    # Add padding after the order information
+    markup += "\n\n\n\n\n\n"
+
+    # Add the cut command to feed the paper
+    markup += "[cut]"
 
     print('Generated markup:', markup)  # Print generated markup for debugging
 
