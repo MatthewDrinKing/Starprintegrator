@@ -30,10 +30,10 @@ def process_json():
     order_number += 1
 
     # Initialize the markup with padding
-    markup = (
-        "[magnify: width 1; height 1]\n"
-        "\n\n\n\n\n\n"  # 6 lines of padding before the order information
-    )
+    markup = "[magnify: width 1; height 1]\n\n\n\n\n\n"  # 6 lines of padding before the order information
+
+    # Generate the markup for the order number and time
+    markup += f"[column: left ORDER {order_number}; right Time {time}]\n"
 
     # Generate the markup for each item in the order
     for item in items:
@@ -41,10 +41,7 @@ def process_json():
         item_quantity = item.get('quantity', '')
 
         # Add the item markup to the overall markup
-        markup += (
-            f"[size: large ORDER {order_number}; right Time {time}]\n"
-            f"[column: left {item_name}; right * {item_quantity}]\n"
-        )
+        markup += f"[column: left {item_name}; right * {item_quantity}]\n"
 
     # Add the table number to the markup
     markup += f"Table Number: {table_number}\n"
