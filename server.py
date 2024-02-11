@@ -24,22 +24,22 @@ def process_json():
     # Format the time string
     time = datetime.strptime(time_str, '%Y-%m-%dT%H:%M:%S.%fZ').strftime('%H:%M')
 
-    items = data.get('items', [])  # Updated to extract the list of items
+    items = data.get('items', [{}])  # Updated to extract the list of items
 
     # Increment the order number
     order_number += 1
 
-    # Initialize the markup with padding
-    markup = "[magnify: width 1; height 1]\n\n\n\n\n\n"  # 6 lines of padding before the order information
+    # Generate the markup based on the extracted information
+    markup = f"[magnify: width 1; height 1]\n"
 
-    # Generate the markup for the order number and time
+    # Add order number and time
     markup += f"[column: left ORDER {order_number}; right Time {time}]\n"
 
     # Generate the markup for each item in the order
     for item in items:
         item_name = item.get('name', '')
         item_quantity = item.get('quantity', '')
-        is_food = item.get('isfood', False)
+        is_food = item.get('isfood', '').lower() == 'true'  # Convert to boolean
 
         # Determine the path based on is_food
         current_path = foodpath if is_food else path
@@ -49,14 +49,7 @@ def process_json():
         # Print the current path for debugging
         print(f'Current Path for {item_name}: {current_path}')
 
-    # Add the table number to the markup
-    markup += f"Table Number: {table_number}\n"
-
-    # Add padding after the order information
-    markup += "\n\n\n\n\n\n"
-
-    # Add the cut command to feed the paper
-    markup += "[cut]"
+    markup += f"Table Number: {table_number}\n[cut: feed; partial]\n[magnify: width 1; height 1]"
 
     print('Generated markup:', markup)  # Print generated markup for debugging
 
@@ -68,6 +61,9 @@ def process_json():
     star_printer_response = requests.post(f'https://api.starprinter.online/{current_path}', data=markup, headers=headers)
 
     # Post the markup to the request catcher URL for debugging purposes
+    headers = {
+        'Content-Type': 'text/vnd.star.markup',
+    }
     request_catcher_response = requests.post('https://testing-prod.requestcatcher.com/', data=markup, headers=headers)
 
     # Return a response to the original request
