@@ -46,6 +46,8 @@ def process_json():
 
         # Add the item markup to the overall markup with the correct path
         markup += f"[column: left {item_name}; right * {item_quantity}]\n"
+        # Print the current path for debugging
+        print(f'Current Path for {item_name}: {current_path}')
 
     # Add the table number to the markup
     markup += f"Table Number: {table_number}\n"
