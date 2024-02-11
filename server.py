@@ -39,8 +39,12 @@ def process_json():
     for item in items:
         item_name = item.get('name', '')
         item_quantity = item.get('quantity', '')
+        is_food = item.get('isfood', False)
 
-        # Add the item markup to the overall markup
+        # Determine the path based on is_food
+        current_path = foodpath if is_food else path
+
+        # Add the item markup to the overall markup with the correct path
         markup += f"[column: left {item_name}; right * {item_quantity}]\n"
 
     # Add the table number to the markup
@@ -59,7 +63,7 @@ def process_json():
         'Content-Type': 'text/vnd.star.markup',
         'Star-Api-Key': api_key,  # Include the API key in the headers
     }
-    star_printer_response = requests.post(f'https://api.starprinter.online/{path}', data=markup, headers=headers)
+    star_printer_response = requests.post(f'https://api.starprinter.online/{current_path}', data=markup, headers=headers)
 
     # Post the markup to the request catcher URL for debugging purposes
     request_catcher_response = requests.post('https://testing-prod.requestcatcher.com/', data=markup, headers=headers)
