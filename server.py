@@ -49,7 +49,7 @@ def process_json():
         # Print the current path for debugging
         print(f'Current Path for {item_name}: {current_path}')
 
-    markup += f"Table Number: {table_number}\n[cut: feed; partial]\n[magnify: width 1; height 1]"  # Reset magnification
+    markup += f"Table Number: {table_number}\n[cut]\n"  # Add the cut markup
 
     print('Generated markup:', markup)  # Print generated markup for debugging
 
@@ -61,9 +61,6 @@ def process_json():
     star_printer_response = requests.post(f'https://api.starprinter.online/{current_path}', data=markup, headers=headers)
 
     # Post the markup to the request catcher URL for debugging purposes
-    headers = {
-        'Content-Type': 'text/vnd.star.markup',
-    }
     request_catcher_response = requests.post('https://testing-prod.requestcatcher.com/', data=markup, headers=headers)
 
     # Return a response to the original request
