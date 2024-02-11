@@ -30,7 +30,7 @@ def process_json():
     order_number += 1
 
     # Generate the markup based on the extracted information
-    markup = f"[magnify: width 1.5; height 1.5]\n"
+    markup = f"[magnify: width 1.5; height 1.5]\n"  # Increase text size by 50%
 
     # Add order number and time
     markup += f"[column: left ORDER {order_number}; right Time {time}]\n"
@@ -49,7 +49,7 @@ def process_json():
         # Print the current path for debugging
         print(f'Current Path for {item_name}: {current_path}')
 
-    markup += f"Table Number: {table_number}\n[cut: feed; partial]\n[magnify: width 1.5; height 1.5]"
+    markup += f"Table Number: {table_number}\n[cut: feed; partial]\n[magnify: width 1; height 1]"  # Reset magnification
 
     print('Generated markup:', markup)  # Print generated markup for debugging
 
