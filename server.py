@@ -22,35 +22,26 @@ def process_json():
     api_key = data.get('api_key')  # Extract the API key from the JSON data
 
     # Format the time string
-    time = datetime.strptime(time_str, '%Y-%m-%dT%H:%M:%S.%fZ').strftime('%H:%M')
+    time = datetime.strptime(time_str, '%Y-%m-%dT%H:%M:%S.%fZ').strftime('%d %b %Y %I:%M%p')
 
     items = data.get('items', [{}])  # Updated to extract the list of items
+
+    # Calculate grand total
+    grand_total = sum(float(item.get('price', 0)) * float(item.get('quantity', 0)) for item in items)
 
     # Increment the order number
     order_number += 1
 
     # Generate the markup based on the extracted information
-    markup = f"[magnify: width 1; height 1]\n"
+    markup = f"[bold: on]\n[magnify: width 3; height 3]\nDrinKing Order\n[negative: on]\nTable number: {table_number if table_number.lower() != 'na' and table_number.strip() else 'Bar Pickup'}\n[space: count 1]\n[plain]\n[align: center]\n[magnify: width 1; height 1]\nPlaced at {time}\n[upperline: on]\n[space: count 48]\n[plain]\n[plain]"
 
-    # Add order number and time
-    markup += f"[column: left ORDER {order_number}; right Time {time}]\n"
-
-    # Generate the markup for each item in the order
     for item in items:
-        item_name = item.get('name', '')
-        item_quantity = item.get('quantity', '')
-        is_food = item.get('isfood', '').lower() == 'true'  # Convert to boolean
+        name = item.get('name', '')
+        quantity = item.get('quantity', '')
+        price = item.get('price', '')
+        markup += f"\n[column: left {quantity} * {name}; right {float(price) * float(quantity)}]"
 
-        # Determine the path based on is_food
-        current_path = foodpath if is_food else path
-
-        # Add the item markup to the overall markup with the correct path
-        markup += f"[column: left {item_name}; right * {item_quantity}]\n"
-        # Print the current path for debugging
-        print(f'Current Path for {item_name}: {current_path}')
-
-    markup += f"Table Number: {table_number}\n[cut: feed; partial]\n[magnify: width 1; height 1]"
-
+    markup += f"\n------------------------------------------------\n[column: left Total; right *{grand_total}]\n------------------------------------------------\n[align: left]\n[cut: feed; partial]"
     print('Generated markup:', markup)  # Print generated markup for debugging
 
     # Post the markup to the target server
@@ -58,7 +49,7 @@ def process_json():
         'Content-Type': 'text/vnd.star.markup',
         'Star-Api-Key': api_key,  # Include the API key in the headers
     }
-    star_printer_response = requests.post(f'https://api.starprinter.online/{current_path}', data=markup, headers=headers)
+    star_printer_response = requests.post(f'https://api.starprinter.online/{path}', data=markup, headers=headers)
 
     # Post the markup to the request catcher URL for debugging purposes
     headers = {
