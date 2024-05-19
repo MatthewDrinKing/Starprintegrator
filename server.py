@@ -38,12 +38,26 @@ def process_json():
     # Increment the order number
     order_number += 1
 
+    # Adjust line length and text size based on printer width
+    if printer_width == 80:
+        line_length = 49
+        magnify_width = 1.5
+        magnify_height = 1.5
+    else:  # Assume 58mm printer
+        line_length = 30
+        magnify_width = 1.2
+        magnify_height = 1.2
+
     # Generate the markup based on the extracted information
     markup = (
-        "[bold: on]\n[magnify: width 3; height 3]\nDrinKing Order\n[negative: on]\n"
+        "[bold: on]\n"
+        f"[magnify: width {magnify_width * 3}; height {magnify_height * 3}]\n"
+        "DrinKing Order\n[negative: on]\n"
         f"Table number: {table_number if table_number.lower() != 'na' and table_number.strip() else 'Bar Pickup'}\n"
-        "[space: count 1]\n[plain]\n[align: center]\n[magnify: width 1; height 1]\n"
-        f"Placed at {formatted_time}\n[upperline: on]\n[space: count 48]\n[plain]\n[plain]"
+        "[space: count 1]\n[plain]\n[align: center]\n"
+        f"[magnify: width {magnify_width}; height {magnify_height}]\n"
+        f"Placed at {formatted_time}\n[upperline: on]\n"
+        f"[space: count {line_length}]\n[plain]\n[plain]"
     )
 
     for item in items:
@@ -53,9 +67,9 @@ def process_json():
         markup += f"\n[column: left {quantity} * {name}; right {float(price) * float(quantity)}]"
 
     markup += (
-        "\n------------------------------------------------\n"
+        f"\n{'-' * line_length}\n"
         f"[column: left Total; right {grand_total}]\n"
-        "------------------------------------------------\n"
+        f"{'-' * line_length}\n"
         "[align: left]\n[cut: feed; partial]"
     )
 
