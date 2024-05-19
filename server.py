@@ -23,8 +23,11 @@ def format_time(time_str, timezone_str):
 def process_json():
     global order_number  # Access the global order number variable
 
+    global order_number  # Access the global order number variable
+
     # Get the JSON data from the request
     data = request.get_json()
+    print('Received JSON data:', data)  # Print received JSON data for debugging
     print('Received JSON data:', data)  # Print received JSON data for debugging
 
     # Extract the relevant information from the JSON data
@@ -62,7 +65,10 @@ def process_json():
         quantity = item.get('quantity', '')
         price = item.get('price', '')
         markup += f"\n[column: left {quantity} * {name}; right {float(price) * float(quantity)}]"
+        markup += f"\n[column: left {quantity} * {name}; right {float(price) * float(quantity)}]"
 
+    markup += f"\n------------------------------------------------\n[column: left Total; right *{grand_total}]\n------------------------------------------------\n[align: left]\n[cut: feed; partial]"
+    print('Generated markup:', markup)  # Print generated markup for debugging
     markup += f"\n------------------------------------------------\n[column: left Total; right *{grand_total}]\n------------------------------------------------\n[align: left]\n[cut: feed; partial]"
     print('Generated markup:', markup)  # Print generated markup for debugging
 
@@ -70,7 +76,9 @@ def process_json():
     headers = {
         'Content-Type': 'text/vnd.star.markup',
         'Star-Api-Key': api_key,  # Include the API key in the headers
+        'Star-Api-Key': api_key,  # Include the API key in the headers
     }
+    star_printer_response = requests.post(f'https://api.starprinter.online/{path}', data=markup, headers=headers)
     star_printer_response = requests.post(f'https://api.starprinter.online/{path}', data=markup, headers=headers)
 
     # Post the markup to the request catcher URL for debugging purposes
@@ -82,6 +90,12 @@ def process_json():
     # Return a response to the original request
     return 'OK'
 
+@app.route('/', methods=['GET'])  # Add a default route for the root path
+def default_route():
+    return 'Welcome to the Starprintegrator server'
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5001)
 @app.route('/', methods=['GET'])  # Add a default route for the root path
 def default_route():
     return 'Welcome to the Starprintegrator server'
