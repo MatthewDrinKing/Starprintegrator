@@ -17,8 +17,8 @@ def process_json():
 
     # Extract the relevant information from the JSON data
     time_str = data.get('Time', '')
-    timezone_str = data.get('timezone', 'UTC')  # New line to extract the timezone from the JSON data
-    printer_width = data.get('printer_width', 58)  # Extract printer width, default to 58mm
+    timezone_str = data.get('timezone', 'UTC')  # Extract the timezone from the JSON data
+    printer_width = int(data.get('printer_width', 58))  # Extract printer width, default to 58mm
     table_number = data.get('table_number', 'NA')
     path = data.get('path', 'v1/a/drinking/d/a0bc35c9/q')
     foodpath = data.get('foodpath', 'v1/a/drinking/d/a0bc35c9/q')
@@ -45,8 +45,8 @@ def process_json():
         magnify_height = 1.5
     else:  # Assume 58mm printer
         line_length = 30
-        magnify_width = 1.2
-        magnify_height = 1.2
+        magnify_width = 1
+        magnify_height = 1
 
     # Generate the markup based on the extracted information
     markup = (
