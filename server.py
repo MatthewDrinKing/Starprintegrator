@@ -55,7 +55,7 @@ def process_json():
             f"[magnify: width {header_dimension}; height {header_dimension}]\n"
             "DrinKing Order\n[negative: on]\n"
             f"Table number: {table_number if table_number.lower() != 'na' and table_number.strip() else 'Bar Pickup'}\n"
-            "[space: count 1]\n[plain]\n[align: center]\n"
+            "[plain]\n[align: center]\n"
             f"[magnify: width {body_dimension}; height {body_dimension}]\n"
             f"Placed at {formatted_time}\n[upperline: on]\n"
             f"[space: count {line_length}]\n[plain]\n[plain]"
