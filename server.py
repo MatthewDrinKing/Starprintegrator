@@ -41,21 +41,22 @@ def process_json():
     # Adjust line length and text size based on printer width
     if printer_width == 80:
         line_length = 49
-        magnify_width = 1.5
-        magnify_height = 1.5
+        header_dimension = 3
+        body_dimension = 1.5
+    
     else:  # Assume 58mm printer
         line_length = 30
-        magnify_width = 1
-        magnify_height = 1
+        header_dimesnion = 2
+        body_dimension = 1
 
     # Generate the markup based on the extracted information
     markup = (
         "[bold: on]\n"
-        f"[magnify: width {magnify_width * 3}; height {magnify_height * 3}]\n"
+        f"[magnify: width {header_dimension}; height {header_dimension}]\n"
         "DrinKing Order\n[negative: on]\n"
         f"Table number: {table_number if table_number.lower() != 'na' and table_number.strip() else 'Bar Pickup'}\n"
         "[space: count 1]\n[plain]\n[align: center]\n"
-        f"[magnify: width {magnify_width}; height {magnify_height}]\n"
+        f"[magnify: width {body_dimension}; height {body_dimension}]\n"
         f"Placed at {formatted_time}\n[upperline: on]\n"
         f"[space: count {line_length}]\n[plain]\n[plain]"
     )
